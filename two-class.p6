@@ -5,15 +5,15 @@ sub fx($x, $mu = 0, $sigma = 1) {
 }
 
 my Int $num-classes = 2;
-my Int $num-samples = 500;
+my Int $num-samples = 20;
 my @data;
 my @class-probs[$num-samples;$num-classes];
 my @Pc[$num-classes];
 my Hash @param[$num-classes];
 my @log-likelihood;
 
-@data.push(rand) for ^100;
-@data.push(rand + 5.0) for ^400;
+@data.push(rand) for ^10;
+@data.push(rand + 5.0) for ^10;
 
 for ^$num-classes -> $class {
     @class-probs[$_;$class] = rand for ^@data;
@@ -55,10 +55,10 @@ for ^1000 -> $iter {
     }
     @log-likelihood[$iter] = @logsum.map(*.exp).sum.log;
 
-    @log-likelihood[$iter].perl.say;
+    @log-likelihood[$iter].say;
     @param.say;
     @Pc.say;
     if $iter > 0 {
-        last if @log-likelihood[$iter] < @log-likelihood[$iter - 1];
+        last if @log-likelihood[$iter] + 1e-10 < @log-likelihood[$iter - 1];
     }
 }
